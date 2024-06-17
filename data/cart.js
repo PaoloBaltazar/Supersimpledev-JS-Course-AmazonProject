@@ -41,6 +41,7 @@ export function addToCart(productId) {
       matchingItem = cartItem;
     }
   });
+  
 
   const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
 
@@ -69,6 +70,20 @@ export function removeFromCart(productId) {
   });
 
   cart = newCart;
+
+  saveToStorage();
+}
+
+export function updateQuantity(productId, newQuantity) {
+  let matchingItem;
+
+  cart.forEach((cartItem) => {
+    if(productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  matchingItem.quantity = newQuantity;
 
   saveToStorage();
 }
