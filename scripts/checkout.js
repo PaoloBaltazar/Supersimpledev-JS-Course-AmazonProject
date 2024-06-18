@@ -124,9 +124,6 @@ function updateCartQuantity() {
 document.querySelectorAll('.js-update-link').forEach((link) => {
   link.addEventListener('click', () => {
     const productId = link.dataset.productId;
-    console.log(productId);
-
-
 
     const cartContainer = document.querySelector(`.js-cart-item-container-${productId}`);
 
@@ -144,12 +141,19 @@ document.querySelectorAll('.js-save-link').forEach((link) => {
     const quantityInput = document.querySelector(`.js-quantity-input-${productId}`)
 
     const newQuantity = Number(quantityInput.value);
-    updateQuantity(productId, newQuantity);
 
-    const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
     
-    quantityLabel.innerHTML = newQuantity;
-    updateCartQuantity();
+
+    if (newQuantity >= 0 && newQuantity < 1000) {
+      updateQuantity(productId, newQuantity);
+
+      const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
+      
+      quantityLabel.innerHTML = newQuantity;
+      updateCartQuantity();
+    } else {
+      alert('invalid quantity')
+    }
   })
 })
 
