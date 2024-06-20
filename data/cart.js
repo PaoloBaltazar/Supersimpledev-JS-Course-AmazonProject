@@ -3,9 +3,6 @@ const addedMessageTimeouts = {};
 
 loadFromStorage();
 
-
-
-
 export function loadFromStorage() {
   cart = JSON.parse(localStorage.getItem('cart'));
   if(!cart) {
@@ -25,22 +22,7 @@ function saveToStorage() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-export function displayAddtoCart(productId) {
-  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
 
-    addedMessage.classList.add('added-to-cart-visible');
-
-    const previousTimeoutId = addedMessageTimeouts[productId];
-      if (previousTimeoutId) {
-        clearTimeout(previousTimeoutId);
-      }
-
-      const timeoutId = setTimeout(() => {
-        addedMessage.classList.remove('added-to-cart-visible');
-      }, 2000);
-
-      addedMessageTimeouts[productId] = timeoutId;
-}
 
 export function addToCart(productId) {
   let matchingItem;
@@ -53,10 +35,7 @@ export function addToCart(productId) {
 
 
   const quantitySelector = document.querySelector(`.js-quantity-selector-${productId}`);
-
   const quantity = Number(quantitySelector.value);
-
-  console.log(quantity);
 
   if (matchingItem) {
     matchingItem.quantity += quantity;
@@ -84,6 +63,20 @@ export function removeFromCart(productId) {
   saveToStorage();
 }
 
+export function updateDeliveryOption(productId, deliveryOptionId) {
+  let matchingItem;
+
+  cart.forEach((cartItem) => {
+    if(productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  matchingItem.deliveryOptionId = deliveryOptionId;
+
+  saveToStorage();
+}
+
 export function updateQuantity(productId, newQuantity) {
   let matchingItem;
 
@@ -98,16 +91,19 @@ export function updateQuantity(productId, newQuantity) {
   saveToStorage();
 }
 
-export function updateDeliveryOption(productId, deliveryOptionId) {
-  let matchingItem;
+export function displayAddtoCart(productId) {
+  const addedMessage = document.querySelector(`.js-added-to-cart-${productId}`);
 
-  cart.forEach((cartItem) => {
-    if(productId === cartItem.productId) {
-      matchingItem = cartItem;
-    }
-  });
+    addedMessage.classList.add('added-to-cart-visible');
 
-  matchingItem.deliveryOptionId = deliveryOptionId;
+    const previousTimeoutId = addedMessageTimeouts[productId];
+      if (previousTimeoutId) {
+        clearTimeout(previousTimeoutId);
+      }
 
-  saveToStorage();
+      const timeoutId = setTimeout(() => {
+        addedMessage.classList.remove('added-to-cart-visible');
+      }, 2000);
+
+      addedMessageTimeouts[productId] = timeoutId;
 }
