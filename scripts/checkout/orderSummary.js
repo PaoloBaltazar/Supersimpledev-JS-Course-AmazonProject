@@ -5,6 +5,7 @@ import { hello } from 'https://unpkg.com/supersimpledev@1.0.1/hello.esm.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
 import { renderPaymentSummary } from './paymentSummary.js';
+import { renderCheckoutHeader } from './checkoutHeader.js';
 
 export function renderOrderSummary() {
   let cartSummaryHTML = '';
@@ -106,20 +107,10 @@ export function renderOrderSummary() {
       const container = document.querySelector(`.js-cart-item-container-${productId}`);
 
       container.remove();
-      updateCartQuantity();
+      renderCheckoutHeader();
       renderPaymentSummary();
     });
   });
-
-  function updateCartQuantity() {
-    let cartQuantity = 0;
-
-    cart.forEach((cartItem) => {
-      cartQuantity += cartItem.quantity;
-    });
-
-    document.querySelector('.js-return-to-home-link').innerHTML = `${cartQuantity} items`;
-  }
 
   document.querySelectorAll('.js-update-link').forEach((link) => {
     link.addEventListener('click', () => {
@@ -148,7 +139,8 @@ export function renderOrderSummary() {
         const quantityLabel = document.querySelector(`.js-quantity-label-${productId}`)
 
         quantityLabel.innerHTML = newQuantity;
-        updateCartQuantity();
+        renderCheckoutHeader();
+        renderPaymentSummary();
       } else {
         alert('invalid quantity')
       }
@@ -164,7 +156,6 @@ export function renderOrderSummary() {
     })
   })
 
-  updateCartQuantity();
 
 }
 
